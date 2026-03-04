@@ -1,6 +1,20 @@
-@EcommerceDev.API_HostAddress = http://localhost:5020
+@EcommerceDev_API_HostAddress = http://localhost:5020
+@productId = 
+@categoryId=
+@customerId=
 
-GET {{EcommerceDev.API_HostAddress}}/weatherforecast/
+GET {{EcommerceDev_API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{EcommerceDev_API_HostAddress}}/api/customers
+Content-Type: application/json
+
+{
+  "fullName": "Lucas Woibau",
+  "email": "lucaswoibau7@gmail.com",
+  "phone": "12345678910",
+  "birthDate": "2001-02-17",
+  "document": "123321"
+}

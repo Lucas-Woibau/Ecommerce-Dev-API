@@ -1,4 +1,11 @@
+using EcommerceDev.Infrastructure;
+using EcommerceDev.Application;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+    .AddInfrastructure()
+    .AddApplication();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

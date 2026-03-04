@@ -3,6 +3,7 @@
     public class CreateCustomerAddressCommand
     {
         public Guid IdCustomer { get; set; } 
+        public string RecipientName { get; set; } = string.Empty;
         public string AddressLine1 { get; set; } = string.Empty;
         public string AddressLine2 { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;

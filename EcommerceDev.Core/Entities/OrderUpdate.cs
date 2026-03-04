@@ -2,6 +2,7 @@
 {
     public class OrderUpdate : BaseEntity
     {
+        protected OrderUpdate() { }
         public OrderUpdate(string description, Guid idOrder)
         {
             Description = description;

@@ -2,6 +2,7 @@
 
 public class ProductCategory : BaseEntity
 {
+    protected ProductCategory() { }
     public ProductCategory(string title, string subCategory) : base()
     {
         Title = title;
@@ -10,4 +11,5 @@ public class ProductCategory : BaseEntity
 
     public string Title { get; set; }
     public string SubCategory { get; set; }
+    public List<Product> Products { get; set; } = [];
 }

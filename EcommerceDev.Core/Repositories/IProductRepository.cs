@@ -6,6 +6,6 @@ namespace EcommerceDev.Core.Repositories
     {
         Task<Guid> Create(Product product);
         Task<List<Product>> GetAll();
-        Task<Product> GetById(Guid id);
+        Task<Product?> GetById(Guid id);
     }
 }

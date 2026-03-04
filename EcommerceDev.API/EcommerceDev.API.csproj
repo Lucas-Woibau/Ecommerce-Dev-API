@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\EcommerceDev.Application\EcommerceDev.Application.csproj" />
+    <ProjectReference Include="..\EcommerceDev.Infrastructure\EcommerceDev.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
