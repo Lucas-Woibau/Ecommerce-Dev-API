@@ -51,6 +51,7 @@ namespace EcommerceDev.Infrastructure.Messaging.Consumers
                         return;
                     }
 
+                    // TODO: implementar integração com gateway pagamento
                     order.MarkAsConfirmed();
 
                     await repository.UpdateAsync(order);
