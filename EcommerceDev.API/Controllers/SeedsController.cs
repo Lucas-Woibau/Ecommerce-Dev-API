@@ -15,10 +15,10 @@ namespace EcommerceDev.API.Controllers
             var category = new ProductCategory("Tecnologia", "Computador");
 
             var customer = new Customer(
-                "Lucas Woibau", "lucaswoibau7@gmail.com", "27999599903", DateTime.Now.AddYears(-25), "12345678910");
+                "Lucas Woibau", "lucaswoibau7@gmail.com", "27999599903", DateTime.UtcNow.AddYears(-25), "12345678910");
 
             var customerAddress = new CustomerAddress(
-                Guid.NewGuid(), customer.FullName, "Rua Exemplo, 123", "Apto 101", "29750-000", "Centro", "ES", "Brasil", "Pancas");
+                customer.Id, customer.FullName, "Rua Exemplo, 123", "Apto 101", "29750-000", "Centro", "ES", "Brasil", "Pancas");
 
             var product = new Product(
                 "Notebook Acer", "Um notebook para jogos", 6_000m, "Acer", 100, category.Id);

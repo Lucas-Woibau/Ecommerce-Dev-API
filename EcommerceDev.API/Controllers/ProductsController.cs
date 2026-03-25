@@ -3,6 +3,8 @@ using EcommerceDev.Application.Commands.Products.DownloadAllImagesForProduct;
 using EcommerceDev.Application.Commands.Products.DownloadImageForProduct;
 using EcommerceDev.Application.Commands.Products.UploadImageForProductCommand;
 using EcommerceDev.Application.Common;
+using EcommerceDev.Application.Queries.Products.GetAllProducts;
+using EcommerceDev.Application.Queries.Products.GetProductDetails;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 
@@ -19,7 +21,7 @@ namespace EcommerceDev.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(CreateProductCommand request)
+        public async Task<IActionResult> Create(CreateProductCommand request)
         {
             var result = await
                 _mediator.DispatchAsync<CreateProductCommand, ResultViewModel<Guid>>(request);
@@ -30,6 +32,38 @@ namespace EcommerceDev.API.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var query = new GetAllProductsQuery();
+
+            var response = await _mediator
+                .DispatchAsync<GetAllProductsQuery, ResultViewModel<List<GetAllProductsItemViewModel>>>(query);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Details (Guid id)
+        {
+            var query = new GetProductsDetailsQuery(id);
+
+            var response = await _mediator
+                .DispatchAsync<GetProductsDetailsQuery, ResultViewModel<ProductDetailsViewModel>>(query);
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response.Message);
+            }
+
+            return Ok(response);
         }
 
         [HttpPost("{id:guid}/images")]

@@ -2,6 +2,11 @@
 {
     public class GetProductsDetailsQuery
     {
-        public Guid IdProduct { get; set; } = Guid.Empty;
+        public GetProductsDetailsQuery(Guid idProduct)
+        {
+            IdProduct = idProduct;
+        }
+
+        public Guid IdProduct { get; set; }
     }
 }

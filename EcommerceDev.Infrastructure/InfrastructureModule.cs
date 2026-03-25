@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using EcommerceDev.Core.Repositories;
+using EcommerceDev.Infrastructure.Caching;
 using EcommerceDev.Infrastructure.Messaging;
 using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Persistence;
@@ -18,20 +19,25 @@ namespace EcommerceDev.Infrastructure
             public IServiceCollection AddInfrastructure(IConfiguration configuration)
             {
                 services
-                    .AddData()
+                    .AddData(configuration)
                     .AddRepositores()
                     .AddMessaging(configuration)
-                    .AddStorage(configuration);
+                    .AddStorage(configuration)
+                    .AddCaching(configuration);
 
                 return services;
 
             }
 
-            private IServiceCollection AddData()
+            private IServiceCollection AddData(IConfiguration configuration)
             {
+                //services
+                //    .AddDbContext<EcommerceDbContext>(options =>
+                //    options.UseInMemoryDatabase("EcommerceDb"));
+
                 services
-                    .AddDbContext<EcommerceDbContext>(options =>
-                    options.UseInMemoryDatabase("EcommerceDb"));
+                    .AddDbContext<EcommerceDbContext> (options 
+                        => options.UseNpgsql(configuration.GetConnectionString("ECommerceDevDb")));
 
                 return services;
             }
@@ -71,6 +77,32 @@ namespace EcommerceDev.Infrastructure
                 services.AddSingleton(blobServiceClient);
 
                 services.AddScoped<IStorageService, BlobStorageService>();
+
+                return services;
+            }
+
+            private IServiceCollection AddCaching(IConfiguration configuration)
+            {
+                var provider = configuration.GetValue<string>("Caching:Provider");
+
+                if (provider == "Redis")
+                {
+                    var connectionString = configuration.GetValue<string>("Caching:Redis:ConnectionString");
+                    var instanceName = configuration.GetValue<string>("Caching:Redis:InstanceName");
+
+                    services.AddStackExchangeRedisCache(o =>
+                    {
+                        o.Configuration = connectionString;
+                        o.InstanceName = instanceName;
+                    });
+
+                    services.AddScoped<ICacheService, RedisCacheService>();
+                }
+                else
+                {
+                    services.AddMemoryCache();
+                    services.AddScoped<ICacheService, MemoryCacheService>();
+                }
 
                 return services;
             }
