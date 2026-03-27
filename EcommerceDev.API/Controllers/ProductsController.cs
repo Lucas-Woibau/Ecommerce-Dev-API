@@ -113,6 +113,11 @@ namespace EcommerceDev.API.Controllers
 
             var memoryStream = new MemoryStream();
 
+            if(streams is null)
+            {
+                return NotFound();
+            }
+
             using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
             {
                 foreach (var stream in streams)

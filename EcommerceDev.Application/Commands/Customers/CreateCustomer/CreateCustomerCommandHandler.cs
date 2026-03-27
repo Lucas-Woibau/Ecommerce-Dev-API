@@ -14,6 +14,8 @@ namespace EcommerceDev.Application.Commands.Customers.CreateCustomer
         }
         public async Task<ResultViewModel<Guid>> HandleAsync(CreateCustomerCommand request)
         {
+            request.BirthDate = DateTime.SpecifyKind(request.BirthDate, DateTimeKind.Utc);
+
             var customer = new Customer(request.FullName, request.Email, request.PhoneNumer,
                 request.BirthDate, request.Document);
 

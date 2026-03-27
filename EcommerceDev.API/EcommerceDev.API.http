@@ -1,8 +1,8 @@
 @EcommerceDev_API_HostAddress = http://localhost:5020
-@customerId = 15c5a362-90e9-4a53-bd34-e2437d4e920e
+@customerId = 3d68ae0b-444f-45b3-9987-03174c3152cd
 @addressId = 416e1549-c8c5-4b71-be87-4caecf113f1b
 @categoryId = 47cadc2b-4168-489b-99a1-e4057f465060
-@productId = 9c6fcfcb-4d5e-437b-8eee-689e5d3161e8
+@productId = 8d9405e9-91e8-4685-9167-9ab53d136947
 
 ###
 
@@ -70,3 +70,20 @@ Content-Type: application/json
   ],
   "deliveryAddressId": "{{addressId}}"
 }
+
+###
+
+PUT {{EcommerceDev_API_HostAddress}}/api/shopping-carts/{{customerId}}
+Content-Type: application/json
+{
+  "items": [
+    {
+      "idProduct": "{{productId}}",
+      "quantity": 4
+    }
+  ]
+}
+
+###
+
+GET  {{EcommerceDev_API_HostAddress}}/api/shopping-carts/{{customerId}}
