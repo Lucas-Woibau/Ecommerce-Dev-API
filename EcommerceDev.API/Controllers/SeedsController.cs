@@ -24,9 +24,9 @@ namespace EcommerceDev.API.Controllers
                 "Notebook Acer", "Um notebook para jogos", 6_000m, "Acer", 100, category.Id);
 
             var order = new Order(
-                customer.Id, customerAddress.Id, 10, 6000, new List<OrderItem>
+                customer.Id, customerAddress.Id, 10, new List<OrderItem>
                 {
-                    new OrderItem(product.Id, 1, 6000)
+                    new OrderItem(product.Id, 1)
                 });
 
             var objects = new List<object>

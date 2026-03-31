@@ -1,9 +1,9 @@
 @EcommerceDev_API_HostAddress = http://localhost:5020
-@customerId = 3d68ae0b-444f-45b3-9987-03174c3152cd
+@customerId = 12c76662-2323-4e7e-a53e-0ea257bc1233
 @addressId = 416e1549-c8c5-4b71-be87-4caecf113f1b
 @categoryId = 47cadc2b-4168-489b-99a1-e4057f465060
 @productId = 8d9405e9-91e8-4685-9167-9ab53d136947
-@zipCode  = 29755-000
+@zipCode  = 05001-200
 
 ###
 
@@ -66,10 +66,14 @@ Content-Type: application/json
   "items": [
     {
       "idProduct": "{{productId}}",
-      "quantity": 2
+      "quantity": 1
+    },
+    {
+      "idProduct": "9188e8b1-ebfa-4390-b700-997510309ef1",
+      "quantity": 3
     }
   ],
-  "deliveryAddressId": "{{addressId}}"
+  "deliveryAddressId": "{{addressId}}",
 }
 
 ###
@@ -81,7 +85,7 @@ Content-Type: application/json
     {
       "idProduct": "{{productId}}",
       "quantity": 4
-    }
+    },
   ]
 }
 
@@ -94,10 +98,14 @@ GET  {{EcommerceDev_API_HostAddress}}/api/shopping-carts/{{customerId}}
 POST {{EcommerceDev_API_HostAddress}}/api/orders/calculate-shipping
 Content-Type: application/json
 {
-  "idCustomer": "{{zipCode}}",
+  "zipCode": "{{zipCode}}",
   "items": [
     {
       "idProduct": "{{productId}}",
+      "quantity": 1
+    },
+    {
+      "idProduct":"9188e8b1-ebfa-4390-b700-997510309ef1",
       "quantity": 2
     }
   ]

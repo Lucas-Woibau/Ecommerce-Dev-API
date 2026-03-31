@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using EcommerceDev.Core.Repositories;
+using EcommerceDev.Infrastructure.BackgroundJobs;
 using EcommerceDev.Infrastructure.Caching;
 using EcommerceDev.Infrastructure.Geolocation;
 using EcommerceDev.Infrastructure.Messaging;
@@ -7,6 +8,8 @@ using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Persistence;
 using EcommerceDev.Infrastructure.Persistence.Repositories;
 using EcommerceDev.Infrastructure.Storage;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +28,8 @@ namespace EcommerceDev.Infrastructure
                     .AddMessaging(configuration)
                     .AddStorage(configuration)
                     .AddCaching(configuration)
-                    .AddGeolocation(configuration);
+                    .AddGeolocation(configuration)
+                    .AddHangfireServices(configuration);
 
                 return services;
 
@@ -33,10 +37,6 @@ namespace EcommerceDev.Infrastructure
 
             private IServiceCollection AddData(IConfiguration configuration)
             {
-                //services
-                //    .AddDbContext<EcommerceDbContext>(options =>
-                //    options.UseInMemoryDatabase("EcommerceDb"));
-
                 services
                     .AddDbContext<EcommerceDbContext>(options
                         => options.UseNpgsql(configuration.GetConnectionString("ECommerceDevDb")));
@@ -114,6 +114,21 @@ namespace EcommerceDev.Infrastructure
                 services.Configure<GeolocationSettings>(configuration.GetSection("Geolocation"));
 
                 services.AddScoped<IGeolocationService, GoogleGeolocationService>();
+
+                return services;
+            }
+
+            private IServiceCollection AddHangfireServices(IConfiguration configuration)
+            {
+                var connectionString = configuration.GetConnectionString("ECommerceDevDb");
+
+                services.AddHangfire(config =>
+                config
+                      .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                      .UseRecommendedSerializerSettings()
+                      .UsePostgreSqlStorage(o => o.UseNpgsqlConnection(connectionString)));
+
+                services.AddHangfireServer();
 
                 return services;
             }

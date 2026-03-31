@@ -3,11 +3,10 @@
     public class OrderItem : BaseEntity
     {
         protected OrderItem() { }
-        public OrderItem(Guid idProduct, int quantity, decimal price)
+        public OrderItem(Guid idProduct, int quantity)
         {
             IdProduct = idProduct;
             Quantity = quantity;
-            Price = price;
         }
 
         public Guid IdProduct { get; set; }
@@ -16,5 +15,10 @@
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public OrderItemReview Review { get; set; }
+
+        public void SetItemPrice(decimal price)
+        {
+            Price = price;
+        }
     }
 }

@@ -5,13 +5,12 @@ namespace EcommerceDev.Core.Entities
     public class Order : BaseEntity
     {
         protected Order() { }
-        public Order(Guid idCustomer, Guid deliveryAddressId, decimal shippingPrice, decimal totalProductsPrice, List<OrderItem> items)
+        public Order(Guid idCustomer, Guid deliveryAddressId, decimal shippingPrice, List<OrderItem> items)
         {
             IdCustomer = idCustomer;
             Status = OrderStatus.Created;
             DeliveryAddressId = deliveryAddressId;
             ShippingPrice = shippingPrice;
-            TotalProductsPrice = totalProductsPrice;
             Items = items;
             Updates = [];
         }
@@ -28,16 +27,35 @@ namespace EcommerceDev.Core.Entities
         public List<OrderItem> Items { get; private set; }
         public List<OrderUpdate> Updates { get; private set; }
 
-        public void MarkAsConfirmed()
+        public void MarkAsPaymentPending()
         {
             if (Status != OrderStatus.Created)
             {
-                Console.WriteLine("[Order] Order is in invalid state for confirmation");
+                Console.WriteLine("[Order] Order is in invalid state for payment.");
 
-                throw new Exception("rder is in invalid state for confirmation");
+                throw new Exception("rder is in invalid state for payment.");
             }
 
-            Status = OrderStatus.Confirmed;
+            Status = OrderStatus.PaymentPending;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void MarkAsPaymentExpired()
+        {
+            if (Status != OrderStatus.PaymentPending)
+            {
+                Console.WriteLine("[Order] Order is in invalid state for payment expiration.");
+
+                throw new Exception("rder is in invalid state for payment expiration.");
+            }
+
+            Status = OrderStatus.PaymentExpired;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void SetTotalProductsPrice(decimal totalProductsPrice)
+        {
+            TotalProductsPrice = totalProductsPrice;
         }
     }
 }

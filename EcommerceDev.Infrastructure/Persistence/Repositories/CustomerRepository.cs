@@ -32,5 +32,10 @@ namespace EcommerceDev.Infrastructure.Persistence.Repositories
         {
             return await  _context.CustomerAddresses.SingleOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<Customer?> GetById(Guid id)
+        {
+            return await _context.Customers.SingleOrDefaultAsync(x =>x.Id == id);
+        }
     }
 }
