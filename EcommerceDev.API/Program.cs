@@ -1,11 +1,13 @@
 using EcommerceDev.Infrastructure;
 using EcommerceDev.Application;
+using EcommerceDev.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddInfrastructure(builder.Configuration)
-    .AddApplication();
+    .AddApplication()
+    .AddCore();
 
 builder.Services.AddControllers();
 

@@ -6,5 +6,6 @@ namespace EcommerceDev.Core.Repositories
     {
         Task<Guid> Create(Customer customer);
         Task<Guid> CreateAddress(CustomerAddress customerAddress);
+        Task<CustomerAddress?> GetAddress(Guid id);
     }
 }

@@ -3,6 +3,7 @@
 @addressId = 416e1549-c8c5-4b71-be87-4caecf113f1b
 @categoryId = 47cadc2b-4168-489b-99a1-e4057f465060
 @productId = 8d9405e9-91e8-4685-9167-9ab53d136947
+@zipCode  = 29755-000
 
 ###
 
@@ -87,3 +88,17 @@ Content-Type: application/json
 ###
 
 GET  {{EcommerceDev_API_HostAddress}}/api/shopping-carts/{{customerId}}
+
+###
+
+POST {{EcommerceDev_API_HostAddress}}/api/orders/calculate-shipping
+Content-Type: application/json
+{
+  "idCustomer": "{{zipCode}}",
+  "items": [
+    {
+      "idProduct": "{{productId}}",
+      "quantity": 2
+    }
+  ]
+}

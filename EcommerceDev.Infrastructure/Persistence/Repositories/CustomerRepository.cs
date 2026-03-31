@@ -1,5 +1,6 @@
 ﻿using EcommerceDev.Core.Entities;
 using EcommerceDev.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceDev.Infrastructure.Persistence.Repositories
 {
@@ -25,6 +26,11 @@ namespace EcommerceDev.Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync();
 
             return address.Id;
+        }
+
+        public async Task<CustomerAddress?> GetAddress(Guid id)
+        {
+            return await  _context.CustomerAddresses.SingleOrDefaultAsync(x => x.Id == id);
         }
     }
 }

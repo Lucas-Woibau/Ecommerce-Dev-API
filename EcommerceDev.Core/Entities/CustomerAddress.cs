@@ -16,7 +16,7 @@
             City = city;
         }
 
-        public Guid IdCustomer {  get; set; }
+        public Guid IdCustomer { get; set; }
         public string RecipientName { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
@@ -25,5 +25,8 @@
         public string State { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
+
+        public string GetFullAddress()
+            => $"{AddressLine1} {AddressLine2} {ZipCode} {District} {State} {City}";
     }
 }

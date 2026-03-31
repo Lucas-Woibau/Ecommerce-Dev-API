@@ -1,6 +1,6 @@
-﻿using EcommerceDev.Application.Commands.Categories.CreateCategory;
-using EcommerceDev.Application.Commands.Orders.CreateOrder;
+﻿using EcommerceDev.Application.Commands.Orders.CreateOrder;
 using EcommerceDev.Application.Common;
+using EcommerceDev.Application.Queries.Orders.CalculateShipping;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceDev.API.Controllers
@@ -21,6 +21,20 @@ namespace EcommerceDev.API.Controllers
         {
             var result = await
                 _mediator.DispatchAsync<CreateOrderCommand, ResultViewModel<Guid>>(request);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("calculate-shipping")]
+        public async Task<IActionResult> CalculateShipping(CalculateShippingQuery request)
+        {
+            var result = await
+                _mediator.DispatchAsync<CalculateShippingQuery, ResultViewModel<decimal>>(request);
 
             if (!result.IsSuccess)
             {

@@ -5,7 +5,7 @@ namespace EcommerceDev.Core.Entities
     public class Order : BaseEntity
     {
         protected Order() { }
-        public Order(Guid idCustomer,Guid deliveryAddressId, decimal shippingPrice, decimal totalProductsPrice, List<OrderItem> items)
+        public Order(Guid idCustomer, Guid deliveryAddressId, decimal shippingPrice, decimal totalProductsPrice, List<OrderItem> items)
         {
             IdCustomer = idCustomer;
             Status = OrderStatus.Created;
@@ -30,7 +30,7 @@ namespace EcommerceDev.Core.Entities
 
         public void MarkAsConfirmed()
         {
-            if(Status != OrderStatus.Created)
+            if (Status != OrderStatus.Created)
             {
                 Console.WriteLine("[Order] Order is in invalid state for confirmation");
 
@@ -39,6 +39,5 @@ namespace EcommerceDev.Core.Entities
 
             Status = OrderStatus.Confirmed;
         }
-
     }
 }
