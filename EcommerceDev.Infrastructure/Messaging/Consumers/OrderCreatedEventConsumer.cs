@@ -1,5 +1,6 @@
 ﻿using EcommerceDev.Core.Events;
 using EcommerceDev.Core.Repositories;
+using EcommerceDev.Infrastructure.Payment;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
@@ -40,9 +41,9 @@ namespace EcommerceDev.Infrastructure.Messaging.Consumers
 
                     var scope = _provider.CreateScope();
 
-                    var repository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
+                    var orderRepository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
 
-                    var order = await repository.GetByIdAsync(@event.IdOrder);
+                    var order = await orderRepository.GetByIdAsync(@event.IdOrder);
 
                     if (order is null)
                     {
@@ -51,10 +52,51 @@ namespace EcommerceDev.Infrastructure.Messaging.Consumers
                         return;
                     }
 
-                    // TODO: implementar integração com gateway pagamento
-                    order.MarkAsPaymentPending();
+                    var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentService>();
 
-                    await repository.UpdateAsync(order);
+                    var customerRepository = scope.ServiceProvider.GetRequiredService<ICustomerRepository>();
+
+                    var customer = await customerRepository.GetById(order.IdCustomer);
+
+                    var customerPaymentModel = new PaymentCustomerModel
+                    {
+                        Email = customer.Email,
+                        FullName = customer.FullName,
+                        PhoneNumber = customer.PhoneNumer
+                    };
+
+                    string? customerPaymentId;
+
+                    if (customer.IdExternalPayment != null)
+                    {
+                        customerPaymentId = customer.IdExternalPayment;
+                    }
+                    else
+                    {
+                        customerPaymentId = await paymentService.CreateCustomerAsync(customerPaymentModel);
+
+                        customer.IdExternalPayment = customerPaymentId;
+
+                        await customerRepository.Update(customer);
+                    }
+                    
+                    var orderPaymentModel = new PaymentOrderModel
+                    {
+                        IdExternalCustomer = customerPaymentId,
+                        Items = order.Items.Select(i => new PaymentOrderItemModel
+                        {
+                            Name = i.Product.Title,
+                            Price = i.Product.Price,
+                            Quantity = i.Quantity
+                        }).ToList()
+                    };
+
+                    var paymentResult = await paymentService.CreateOrderAsync(orderPaymentModel);
+
+                    order.MarkAsPaymentPending();
+                    order.IdExternalOrder = paymentResult.Id;
+                    order.PaymentUrl = paymentResult.Url;
+                    await orderRepository.UpdateAsync(order);
 
                     Console.WriteLine($"[Consumer] Order with Id {@event.IdOrder} updated");
 

@@ -37,5 +37,11 @@ namespace EcommerceDev.Infrastructure.Persistence.Repositories
         {
             return await _context.Customers.SingleOrDefaultAsync(x =>x.Id == id);
         }
+
+        public async Task Update(Customer customer)
+        {
+            _context.Customers.Update(customer);
+            await _context.SaveChangesAsync();
+        }
     }
 }

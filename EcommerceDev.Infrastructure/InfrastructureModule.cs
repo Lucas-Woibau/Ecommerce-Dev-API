@@ -1,10 +1,10 @@
 ﻿using Azure.Storage.Blobs;
 using EcommerceDev.Core.Repositories;
-using EcommerceDev.Infrastructure.BackgroundJobs;
 using EcommerceDev.Infrastructure.Caching;
 using EcommerceDev.Infrastructure.Geolocation;
 using EcommerceDev.Infrastructure.Messaging;
 using EcommerceDev.Infrastructure.Messaging.Consumers;
+using EcommerceDev.Infrastructure.Payment;
 using EcommerceDev.Infrastructure.Persistence;
 using EcommerceDev.Infrastructure.Persistence.Repositories;
 using EcommerceDev.Infrastructure.Storage;
@@ -29,7 +29,8 @@ namespace EcommerceDev.Infrastructure
                     .AddStorage(configuration)
                     .AddCaching(configuration)
                     .AddGeolocation(configuration)
-                    .AddHangfireServices(configuration);
+                    .AddHangfireServices(configuration)
+                    .AddPayment(configuration);
 
                 return services;
 
@@ -129,6 +130,13 @@ namespace EcommerceDev.Infrastructure
                       .UsePostgreSqlStorage(o => o.UseNpgsqlConnection(connectionString)));
 
                 services.AddHangfireServer();
+
+                return services;
+            }
+
+            private IServiceCollection AddPayment(IConfiguration configuration)
+            {
+                services.AddScoped<IPaymentService, StripePaymentService>();
 
                 return services;
             }

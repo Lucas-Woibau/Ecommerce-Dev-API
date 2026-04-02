@@ -8,5 +8,6 @@ namespace EcommerceDev.Core.Repositories
         Task<Guid> CreateAddress(CustomerAddress customerAddress);
         Task<CustomerAddress?> GetAddress(Guid id);
         Task<Customer?> GetById(Guid id);
+        Task Update (Customer customer);
     }
 }

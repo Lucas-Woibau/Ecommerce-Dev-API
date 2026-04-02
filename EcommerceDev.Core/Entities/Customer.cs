@@ -19,6 +19,7 @@
         public string PhoneNumer { get; set; }
         public DateTime BirthDate { get; set; }
         public string Document { get; set; }
+        public string? IdExternalPayment { get; set; }
         public List<CustomerAddress> Addresses { get; set; }
         public List<Order> Orders { get; set; }
         public List<OrderItemReview> Reviews { get; set; }
