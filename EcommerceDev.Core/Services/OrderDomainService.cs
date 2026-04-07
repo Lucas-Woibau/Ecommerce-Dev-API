@@ -6,6 +6,7 @@ public class OrderDomainService : IOrderDomainService
 {
     private const decimal PricePerKm = 30;
     private const decimal PricePerUnit = 2.5m;
+    private const int MaximumAllowedDistance = 250;
 
     private readonly IProductRepository _productRepository;
 
@@ -16,7 +17,18 @@ public class OrderDomainService : IOrderDomainService
 
     public decimal CalculateShippingCost(int distanceKm, List<OrderItem> items)
     {
-        var totalPriceKm = PricePerKm * distanceKm;
+        if (items.Count == 0)
+        {
+            throw new InvalidOperationException("No items found.");
+        }
+
+        if (distanceKm > MaximumAllowedDistance || distanceKm < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(distanceKm), distanceKm, "Distance out of range.");
+        }
+
+        var totalPriceKm = distanceKm == 0 ? PricePerKm :
+            PricePerKm * distanceKm;
 
         var totalUnits = items.Sum(i => i.Quantity);
         var totalPriceUnits = PricePerUnit * totalUnits;

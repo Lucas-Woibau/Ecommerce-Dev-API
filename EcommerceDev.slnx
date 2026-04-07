@@ -5,5 +5,7 @@
     <Project Path="EcommerceDev.Core/EcommerceDev.Core.csproj" />
     <Project Path="EcommerceDev.Infrastructure/EcommerceDev.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="EcommerceDev.UnitTests/EcommerceDev.UnitTests.csproj" Id="e052a833-c3ae-46a8-a7ce-8cd249c1a6f0" />
+  </Folder>
 </Solution>
