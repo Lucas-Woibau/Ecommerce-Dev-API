@@ -33,6 +33,16 @@ namespace EcommerceDev.Infrastructure.Persistence.Repositories
             return await  _context.CustomerAddresses.SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Customer?> GetByEmail(string email)
+        {
+            return await _context.Customers.SingleOrDefaultAsync(x => x.Email == email);
+        }
+
+        public async Task<bool> EmailExists(string email)
+        {
+            return await _context.Customers.AnyAsync(x => x.Email == email);
+        }
+
         public async Task<Customer?> GetById(Guid id)
         {
             return await _context.Customers.SingleOrDefaultAsync(x =>x.Id == id);
@@ -42,6 +52,13 @@ namespace EcommerceDev.Infrastructure.Persistence.Repositories
         {
             _context.Customers.Update(customer);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<CustomerAddress>> GetAllAddresses(Guid customerId)
+        {
+            return await _context.CustomerAddresses
+            .Where(x => x.IdCustomer == customerId)
+            .ToListAsync();
         }
     }
 }

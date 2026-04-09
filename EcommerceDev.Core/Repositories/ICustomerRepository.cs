@@ -5,9 +5,12 @@ namespace EcommerceDev.Core.Repositories
     public interface ICustomerRepository
     {
         Task<Guid> Create(Customer customer);
-        Task<Guid> CreateAddress(CustomerAddress customerAddress);
+        Task<Guid> CreateAddress(CustomerAddress address);
         Task<CustomerAddress?> GetAddress(Guid id);
         Task<Customer?> GetById(Guid id);
-        Task Update (Customer customer);
+        Task<Customer?> GetByEmail(string email);
+        Task<bool> EmailExists(string email);
+        Task<List<CustomerAddress>> GetAllAddresses(Guid customerId);
+        Task Update(Customer customer);
     }
 }
