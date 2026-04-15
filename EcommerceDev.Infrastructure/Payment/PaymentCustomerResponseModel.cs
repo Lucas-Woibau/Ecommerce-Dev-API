@@ -1,7 +1,6 @@
-﻿namespace EcommerceDev.Infrastructure.Payment
+namespace EcommerceDev.Infrastructure.Payment;
+
+public class PaymentCustomerResponseModel
 {
-    public class PaymentCustomerResponseModel
-    {
-        public string Id { get; set; }
-    }
+    public string Id { get; set; }
 }

@@ -7,6 +7,7 @@ namespace EcommerceDev.Application.Commands.Customers.CreateCustomerAddress
     public class CreateCustomerAddressCommandHandler : IHandler<CreateCustomerAddressCommand, ResultViewModel<Guid>>
     {
         private readonly ICustomerRepository _repository;
+
         public CreateCustomerAddressCommandHandler(ICustomerRepository repository)
         {
             _repository = repository;
@@ -22,9 +23,8 @@ namespace EcommerceDev.Application.Commands.Customers.CreateCustomerAddress
                 request.ZipCode,
                 request.District,
                 request.State,
-                request.Country,
-                request.City
-            );
+                request.City,
+                request.Country);
 
             await _repository.CreateAddress(address);
 

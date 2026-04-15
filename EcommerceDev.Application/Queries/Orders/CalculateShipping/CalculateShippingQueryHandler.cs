@@ -4,40 +4,38 @@ using EcommerceDev.Core.Services;
 using EcommerceDev.Infrastructure.Geolocation;
 using Microsoft.Extensions.Options;
 
-namespace EcommerceDev.Application.Queries.Orders.CalculateShipping
+namespace EcommerceDev.Application.Queries.Orders.CalculateShipping;
+
+public class CalculateShippingQueryHandler
+    : IHandler<CalculateShippingQuery, ResultViewModel<decimal>>
 {
-    public class CalculateShippingQueryHandler
-        : IHandler<CalculateShippingQuery, ResultViewModel<decimal>>
+    private readonly IGeolocationService _geolocationService;
+    private readonly IOrderDomainService _orderDomainService;
+    private readonly GeolocationSettings _geolocationSettings;
+
+    public CalculateShippingQueryHandler(
+        IGeolocationService geolocationService,
+        IOrderDomainService orderDomainService,
+        IOptions<GeolocationSettings> options)
     {
-        private readonly IGeolocationService _geolocationService;
-        private readonly IOrderDomainService _orderDomainService;
-        private readonly GeolocationSettings _geolocationsSettings;
+        _geolocationService = geolocationService;
+        _orderDomainService = orderDomainService;
+        _geolocationSettings = options.Value;
+    }
 
-        public CalculateShippingQueryHandler(
-            IGeolocationService geolocationService,
-            IOrderDomainService orderDomainService,
-            IOptions<GeolocationSettings> options)
+    public async Task<ResultViewModel<decimal>> HandleAsync(CalculateShippingQuery request)
+    {
+        var distanceInKm = await _geolocationService.GetDistance(_geolocationSettings.Origin, request.ZipCode);
+
+        var items = request.Items.Select(i => new OrderItem(i.IdProduct, i.Quantity)).ToList();
+
+        var totalShippingCost = _orderDomainService.CalculateShippingCost(distanceInKm, items);
+
+        if (totalShippingCost == -1)
         {
-            _geolocationService = geolocationService;
-            _orderDomainService = orderDomainService;
-            _geolocationsSettings = options.Value;
+            return ResultViewModel<decimal>.Error("Erro ao calcular frete.");
         }
 
-        public async Task<ResultViewModel<decimal>> HandleAsync(CalculateShippingQuery request)
-        {
-            var distanceInKm = await _geolocationService.GetDistance
-                (_geolocationsSettings.Origin, request.ZipCode);
-
-            var items = request.Items.Select(i => new OrderItem(i.IdProduct, i.Quantity)).ToList();
-
-            var totalShippingCost = _orderDomainService.CalculateShippingCost(distanceInKm, items);
-
-            if (totalShippingCost == -1)
-            {
-                return ResultViewModel<decimal>.Error("Erro ao calcular frete.");
-            }
-
-            return new ResultViewModel<decimal>(totalShippingCost);
-        }
+        return new ResultViewModel<decimal>(totalShippingCost);
     }
 }

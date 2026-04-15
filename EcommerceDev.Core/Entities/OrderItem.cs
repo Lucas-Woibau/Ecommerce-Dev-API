@@ -1,24 +1,23 @@
-﻿namespace EcommerceDev.Core.Entities
+﻿namespace EcommerceDev.Core.Entities;
+
+public class OrderItem : BaseEntity
 {
-    public class OrderItem : BaseEntity
+    protected OrderItem() { }
+    public OrderItem(Guid idProduct, int quantity)
     {
-        protected OrderItem() { }
-        public OrderItem(Guid idProduct, int quantity)
-        {
-            IdProduct = idProduct;
-            Quantity = quantity;
-        }
+        IdProduct = idProduct;
+        Quantity = quantity;
+    }
 
-        public Guid IdProduct { get; set; }
-        public Product Product { get; set; }
-        public Guid IdOrder { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
-        public OrderItemReview Review { get; set; }
+    public Guid IdProduct { get; set; }
+    public Product Product { get; set; }
+    public Guid IdOrder { get; set; }
+    public int Quantity { get; set; }
+    public decimal Price { get; set; }
+    public OrderItemReview Review { get; set; }
 
-        public void SetItemPrice(decimal price)
-        {
-            Price = price;
-        }
+    public void SetItemPrice(decimal price)
+    {
+        Price = price;
     }
 }

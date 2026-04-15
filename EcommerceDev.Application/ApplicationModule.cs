@@ -24,7 +24,7 @@ namespace EcommerceDev.Application
                         .AddClasses(c => c.AssignableTo(typeof(IHandler<,>)))
                         .AsImplementedInterfaces()
                         .WithTransientLifetime()
-                    );
+                );
 
                 return services;
             }

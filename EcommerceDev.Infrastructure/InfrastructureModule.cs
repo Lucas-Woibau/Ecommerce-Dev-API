@@ -7,7 +7,7 @@ using EcommerceDev.Infrastructure.Messaging;
 using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Payment;
 using EcommerceDev.Infrastructure.Persistence;
-using EcommerceDev.Infrastructure.Persistence.Repositories;
+using EcommerceDev.Infrastructure.Repositories;
 using EcommerceDev.Infrastructure.Services;
 using EcommerceDev.Infrastructure.SignalR;
 using EcommerceDev.Infrastructure.Storage;

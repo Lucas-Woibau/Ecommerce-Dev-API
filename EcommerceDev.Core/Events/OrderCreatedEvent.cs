@@ -7,6 +7,6 @@
             IdOrder = idOrder;
         }
 
-        public Guid IdOrder { get; set; }
+        public Guid IdOrder { get; private set; }
     }
 }

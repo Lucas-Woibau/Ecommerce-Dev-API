@@ -4,49 +4,46 @@ using EcommerceDev.Application.Common.ShoppingCart;
 using EcommerceDev.Application.Queries.ShoppingCarts.GetShoppingCart;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EcommerceDev.API.Controllers
+namespace EcommerceDev.API.Controllers;
+
+[ApiController]
+[Route("api/shopping-carts")]
+public class ShoppingCartsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/shopping-carts")]
-    public class ShoppingCartsController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public ShoppingCartsController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public ShoppingCartsController(IMediator mediator)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(Guid id)
+    {
+        var query = new GetShoppingCartQuery(id);
+
+        var result = await _mediator.DispatchAsync<GetShoppingCartQuery, ResultViewModel<List<ProductItemShoppingCartModel>>>(query);
+
+        if (!result.IsSuccess)
         {
-            _mediator = mediator;
+            return NotFound(result.Message);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        return Ok(result.Data);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(Guid id, CreateOrUpdateShoppingCartCommand command)
+    {
+        command.IdCustomer = id;
+
+        var result = await _mediator.DispatchAsync<CreateOrUpdateShoppingCartCommand, ResultViewModel<bool>>(command);
+
+        if (!result.IsSuccess)
         {
-            var query = new GetShopppingCartQuery(id);
-
-            var result = await _mediator
-                .DispatchAsync<GetShopppingCartQuery, ResultViewModel<List<ProductItemShoppingCartModel>>>(query);
-
-            if (!result.IsSuccess)
-            {
-                return NotFound(result.Message);
-            }
-
-            return Ok(result.Data);
+            return NotFound(result.Message);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, CreateOrUpdateShoppingCartCommand command)
-        {
-            command.IdCustomer = id;
-
-            var result = await _mediator
-                .DispatchAsync<CreateOrUpdateShoppingCartCommand, ResultViewModel<bool>>(command);
-
-            if (!result.IsSuccess)
-            {
-                return NotFound(result.Message);
-            }
-
-            return Ok(result.Data);
-        }
+        return Ok(result.Data);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EcommerceDev.Core.Entities;
 using EcommerceDev.Core.Repositories;
+using EcommerceDev.Core.Services;
 using Moq;
 
 namespace EcommerceDev.UnitTests.Core

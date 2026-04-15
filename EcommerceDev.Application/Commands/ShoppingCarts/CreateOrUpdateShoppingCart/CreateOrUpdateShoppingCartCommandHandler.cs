@@ -15,6 +15,7 @@ namespace EcommerceDev.Application.Commands.ShoppingCarts.CreateOrUpdateShopping
         public async Task<ResultViewModel<bool>> HandleAsync(CreateOrUpdateShoppingCartCommand request)
         {
             var cacheKey = request.IdCustomer.ToString();
+
             await _cacheService.SetAsync(cacheKey, request.Items);
 
             return ResultViewModel<bool>.Success(true);

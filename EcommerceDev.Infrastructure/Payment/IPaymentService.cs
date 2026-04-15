@@ -1,8 +1,9 @@
-﻿namespace EcommerceDev.Infrastructure.Payment
+using System.Net.Http.Json;
+
+namespace EcommerceDev.Infrastructure.Payment;
+
+public interface IPaymentService
 {
-    public interface IPaymentService
-    {
-        Task<string> CreateCustomerAsync(PaymentCustomerModel customer);
-        Task<PaymentOrderResponseModel> CreateOrderAsync(PaymentOrderModel customer);
-    }
+    Task<string> CreateCustomerAsync(PaymentCustomerModel customer);
+    Task<PaymentOrderResponseModel> CreateOrderAsync(PaymentOrderModel paymentOrderModel);
 }

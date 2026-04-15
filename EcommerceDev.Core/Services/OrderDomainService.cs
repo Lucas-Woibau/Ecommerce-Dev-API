@@ -1,34 +1,36 @@
 ﻿using EcommerceDev.Core.Entities;
 using EcommerceDev.Core.Repositories;
-using EcommerceDev.Core.Services;
+
+namespace EcommerceDev.Core.Services;
 
 public class OrderDomainService : IOrderDomainService
 {
     private const decimal PricePerKm = 30;
     private const decimal PricePerUnit = 2.5m;
-    private const int MaximumAllowedDistance = 250;
+    private const int MaximumAllowedDistanceKm = 250;
 
-    private readonly IProductRepository _productRepository;
+    private readonly IProductRepository _repository;
 
-    public OrderDomainService(IProductRepository productRepository)
+    public OrderDomainService(IProductRepository repository)
     {
-        _productRepository = productRepository;
+        _repository = repository;
     }
 
-    public decimal CalculateShippingCost(int distanceKm, List<OrderItem> items)
+    public decimal CalculateShippingCost(int distanceInKm, List<OrderItem> items)
     {
         if (items.Count == 0)
         {
             throw new InvalidOperationException("No items found.");
         }
 
-        if (distanceKm > MaximumAllowedDistance || distanceKm < 0)
+        if (distanceInKm > MaximumAllowedDistanceKm || distanceInKm < 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(distanceKm), distanceKm, "Distance out of range.");
+            throw new ArgumentOutOfRangeException(nameof(distanceInKm), distanceInKm, "Distance out of range.");
         }
 
-        var totalPriceKm = distanceKm == 0 ? PricePerKm :
-            PricePerKm * distanceKm;
+        var totalPriceKm = distanceInKm == 0 ?
+            PricePerKm :
+            PricePerKm * distanceInKm;
 
         var totalUnits = items.Sum(i => i.Quantity);
         var totalPriceUnits = PricePerUnit * totalUnits;
@@ -54,7 +56,7 @@ public class OrderDomainService : IOrderDomainService
     {
         foreach (var item in order.Items)
         {
-            var product = await _productRepository.GetById(item.IdProduct);
+            var product = await _repository.GetById(item.IdProduct);
 
             if (product == null)
             {
